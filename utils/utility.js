@@ -103,6 +103,66 @@ function getCompanyPod(pod_id){
     })
 }
 
+function getDashboardDetails(pod_id){
+    return new Promise(function(resolve,reject){
+        search.getLimitedId("pod",{ "id.keyword": pod_id })
+        .then(function(resp){
+            getDates(new Date(resp["startDate"]), new Date(resp["endDate"]), resp["pod_name"])
+            .then(function(res){
+                resolve(res)
+            })
+        })
+    })
+}
+function getDashboardCompanyPod(pod_id){
+    return new Promise(function(resolve,reject){
+        var promises = [];
+        for (let _data in pod_id){
+	    	promises.push(getDashboardDetails(pod_id[_data]))
+        }
+        Promise.all(promises)
+        .then(function(resp){
+            console.log(resp)
+            var merged = [].concat.apply([], resp);
+            resolve(merged)
+            
+        })
+    })
+}
+
+function createObject( date, pod_name){
+    return new Promise(function(resolve,reject){
+        console.log(typeof(date))
+        _date = new Date(date)
+
+        let _temp = {}
+        //{ title: 'event 1', date: '2019-11-01' },
+        _temp["title"] = pod_name
+        _temp["date"] = _date.toISOString().split('T')[0]
+        resolve(_temp)
+    })
+}
+
+function getDates(startDate, stopDate, pod_name) {
+    return new Promise(function(resolve, reject){
+        console.log(startDate,stopDate)
+        var dateArray = [];
+        
+        for(let currentDate = startDate; currentDate <= stopDate; currentDate.setDate(currentDate.getDate()+1)){
+            console.log("co")
+            dateArray.push(createObject(currentDate, pod_name));
+        }
+        
+        Promise.all(dateArray)
+        .then(function(resp){
+            console.log("asdguas",resp)
+            resolve(resp)
+            
+        })
+    })
+  
+ }
+
 module.exports = {
-    mergeObject, addPodId, addPerson, getUserPod, getCompanyPod
+    mergeObject, addPodId, addPerson, getUserPod, getCompanyPod, getDashboardCompanyPod
 }

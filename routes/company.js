@@ -113,6 +113,23 @@ router.post('/get-added-user', function(req, res, next){
   })
 }) 
 
+router.get('/get-dashboard', function(req, res, next){
+  search.getId("company", { "email_id.keyword": req.query.email_id })
+    .then(function (resp) {
+      console.log(resp["pod_id"]. length)
+      if (resp["pod_id"].length == 0) {
+        res.json("[]")
+      }
+      else {
+        console.log("asdas")
+        utility.getDashboardCompanyPod(resp["pod_id"])
+          .then(function (_values) {
+            res.json(_values)
+          })
+      }
+      //res.json(resp["pod_id"])
+    })
+})
 
 
 module.exports = router;

@@ -21,6 +21,26 @@ function getId(_index, _data){
 	});
 }
 
+function getLimitedId(_index, _data){
+	return new Promise(function(resolve, reject){
+		elasticClient.search({
+			index: _index,
+			body: {
+		    	query: {
+		      		term: _data		    
+		  		}
+			  },
+			  "_source": ["pod_name","startDate","endDate"]
+		})
+		.then(function(resp){
+			resolve(resp.hits.hits[0]["_source"]);
+		})
+		.catch(function(resp){
+			resolve(false);
+		})
+	});
+}
+
 
 function getMultipleUsers(_index, _data, pod_id) {
 	return new Promise(function (resolve, reject) {
@@ -138,5 +158,5 @@ function getAddedUser(_index, _email, _pod){
 
 
 module.exports = {
-    getId, getMultipleUsers, getAddedUser
+    getId, getMultipleUsers, getAddedUser, getLimitedId
 }

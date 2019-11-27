@@ -107,7 +107,11 @@ function getDashboardDetails(pod_id){
     return new Promise(function(resolve,reject){
         search.getLimitedId("pod",{ "id.keyword": pod_id })
         .then(function(resp){
-            getDates(new Date(resp["startDate"]), new Date(resp["endDate"]), resp["pod_name"])
+            startDate = new Date(resp["startDate"]);
+            endDate = new Date(resp["endDate"]);
+            startDate.setDate(startDate.getDate()+1)
+            endDate.setDate(endDate.getDate()+1)
+            getDates(new Date(startDate), new Date(endDate), resp["pod_name"])
             .then(function(res){
                 resolve(res)
             })
@@ -147,7 +151,6 @@ function getDates(startDate, stopDate, pod_name) {
     return new Promise(function(resolve, reject){
         console.log(startDate,stopDate)
         var dateArray = [];
-        
         for(let currentDate = startDate; currentDate <= stopDate; currentDate.setDate(currentDate.getDate()+1)){
             console.log("co")
             dateArray.push(createObject(currentDate, pod_name));

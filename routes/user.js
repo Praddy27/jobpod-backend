@@ -21,13 +21,15 @@ router.post('/login', function (req, res, next) {
       if (resp == false) {
         res.status(401);
         res.json("failed");
-      }
-      if (req.body.password == "password")
+      } else{
         res.json(resp);
-      else {
-        res.status(401);
-        res.json("failed 1");
       }
+      // if (req.body.password == "password")
+      //   res.json(resp);
+      // else {
+      //   res.status(401);
+      //   res.json("failed 1");
+      // }
     });
 });
 

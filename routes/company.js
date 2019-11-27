@@ -12,12 +12,14 @@ router.post('/login', function (req, res, next) {
         res.status(401);
         res.json("failed");
       }
-      if (req.body.password == "password")
-        res.json(resp);
-      else {
-        res.status(401);
-        res.json("failed 1");
-      }
+      // if (req.body.password == "password")
+      //   res.json(resp);
+      // else {
+      //   res.status(401);
+      //   res.json("failed 1");
+      // }
+      else
+        res.json(resp)
     });
 });
 
